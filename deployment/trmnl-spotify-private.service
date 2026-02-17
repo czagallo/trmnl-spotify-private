@@ -1,0 +1,16 @@
+[Unit]
+Description=TRMNL Spotify Private Plugin
+After=network.target
+
+[Service]
+Type=simple
+User=antfarm
+WorkingDirectory=/home/antfarm/deployments/trmnl-spotify-private
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=PORT=3006
+
+[Install]
+WantedBy=multi-user.target
