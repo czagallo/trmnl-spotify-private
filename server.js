@@ -63,6 +63,7 @@ async function getCurrentlyPlaying(token) {
 async function getRecentlyPlayed(token, limit) {
   const result = await spotifyRequest(`/v1/me/player/recently-played?limit=${limit}`, token);
   if (!result || result.statusCode !== 200 || !result.data || !result.data.items) {
+    console.error('recently-played response:', result ? `status=${result.statusCode} body=${JSON.stringify(result.data).substring(0, 200)}` : 'null');
     return [];
   }
   return result.data.items.map((item, idx) => ({
@@ -77,6 +78,7 @@ async function getRecentlyPlayed(token, limit) {
 async function getTopTracks(token, timeRange, limit) {
   const result = await spotifyRequest(`/v1/me/top/tracks?time_range=${timeRange}&limit=${limit}`, token);
   if (!result || result.statusCode !== 200 || !result.data || !result.data.items) {
+    console.error('top-tracks response:', result ? `status=${result.statusCode} body=${JSON.stringify(result.data).substring(0, 200)}` : 'null');
     return [];
   }
   return result.data.items.map((track, idx) => ({
@@ -90,6 +92,7 @@ async function getTopTracks(token, timeRange, limit) {
 async function getTopArtists(token, timeRange, limit) {
   const result = await spotifyRequest(`/v1/me/top/artists?time_range=${timeRange}&limit=${limit}`, token);
   if (!result || result.statusCode !== 200 || !result.data || !result.data.items) {
+    console.error('top-artists response:', result ? `status=${result.statusCode} body=${JSON.stringify(result.data).substring(0, 200)}` : 'null');
     return [];
   }
   return result.data.items.map((artist, idx) => ({
@@ -114,13 +117,14 @@ app.get('/api/spotify', async (req, res) => {
   }
 
   const accessToken = authHeader.replace('Bearer ', '');
+  console.log(`Auth header present: ${!!authHeader}, token length: ${accessToken.length}, token prefix: ${accessToken.substring(0, 10)}...`);
 
   try {
     const [nowPlaying, recentTracks, topTracks, topArtists] = await Promise.all([
-      getCurrentlyPlaying(accessToken).catch(() => null),
-      getRecentlyPlayed(accessToken, 5).catch(() => []),
-      getTopTracks(accessToken, 'short_term', 5).catch(() => []),
-      getTopArtists(accessToken, 'short_term', 5).catch(() => [])
+      getCurrentlyPlaying(accessToken).catch((e) => { console.error('currently-playing error:', e.message); return null; }),
+      getRecentlyPlayed(accessToken, 5).catch((e) => { console.error('recently-played error:', e.message); return []; }),
+      getTopTracks(accessToken, 'short_term', 5).catch((e) => { console.error('top-tracks error:', e.message); return []; }),
+      getTopArtists(accessToken, 'short_term', 5).catch((e) => { console.error('top-artists error:', e.message); return []; })
     ]);
 
     const mergeVars = {

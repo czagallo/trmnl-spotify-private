@@ -5,12 +5,21 @@ After=network.target
 [Service]
 Type=simple
 User=antfarm
+Group=antfarm
 WorkingDirectory=/home/antfarm/deployments/trmnl-spotify-private
+Environment="NODE_ENV=production"
+Environment="PORT=3006"
+
+ExecStartPre=/usr/local/bin/kill_port.sh 3006
+ExecStartPre=/bin/sleep 2
 ExecStart=/usr/bin/node server.js
-Restart=on-failure
+ExecStop=/usr/local/bin/kill_port.sh 3006
+
+KillMode=mixed
+SendSIGKILL=yes
+TimeoutStopSec=5
+Restart=always
 RestartSec=10
-Environment=NODE_ENV=production
-Environment=PORT=3006
 
 [Install]
 WantedBy=multi-user.target
