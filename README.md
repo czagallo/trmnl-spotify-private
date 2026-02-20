@@ -11,6 +11,7 @@ Unlike a marketplace plugin where the server handles OAuth, this private plugin 
 - **Top Tracks** - your most-listened tracks (last 4 weeks)
 - **Top Artists** - your most-listened artists (last 4 weeks)
 - All 4 TRMNL layout sizes (full, half vertical, half horizontal, quadrant)
+- **TRMNL X optimized** - responsive upsizing via `lg:` classes, extra content on larger screens, JS-based text clamping via `data-clamp`
 
 ## How It Works
 
@@ -84,38 +85,54 @@ Click "Edit Markup" and paste the templates below into each layout tab.
     <div class="columns">
       <div class="column">
         <div class="markdown">
-          <span class="title">Connection Required</span>
+          <span class="title lg:title--large">Connection Required</span>
           <div class="content content--center">{{ error_message }}</div>
         </div>
       </div>
     </div>
   </div>
 {% else %}
-  <div class="layout layout--col gap--medium">
+  <div class="layout layout--col gap--medium lg:gap--large">
     {% if has_now_playing %}
       <div class="item item--emphasis-2">
         <div class="meta"></div>
         <div class="content">
-          <span class="title title--small">Now Playing</span>
-          <span class="description">{{ now_playing_track | truncate: 40 }} - {{ now_playing_artist | truncate: 30 }}</span>
+          <span class="title title--small lg:title--base">Now Playing</span>
+          <span class="description lg:description--large" data-clamp="1" data-clamp-lg="2">{{ now_playing_track }} - {{ now_playing_artist }}</span>
           <div class="flex gap--small">
-            <span class="label label--small label--underline">{{ now_playing_album | truncate: 30 }}</span>
-            <span class="label label--small">{% if now_playing_is_active %}Playing{% else %}Paused{% endif %}</span>
+            <span class="label label--small lg:label--base label--underline" data-clamp="1">{{ now_playing_album }}</span>
+            <span class="label label--small lg:label--base">{% if now_playing_is_active %}Playing{% else %}Paused{% endif %}</span>
           </div>
         </div>
       </div>
       <div class="divider"></div>
     {% endif %}
-    <span class="title title--small">Top Tracks (4 weeks)</span>
-    {% for track in top_tracks %}
-      <div class="item">
-        <div class="meta"><span class="index">{{ track.index }}</span></div>
-        <div class="content">
-          <span class="title title--small">{{ track.track_name | truncate: 45 }}</span>
-          <span class="label label--small">{{ track.artist_name | truncate: 40 }}</span>
-        </div>
+    <div class="flex flex--row">
+      <div class="stretch-x">
+        <span class="title title--small lg:title--base">Top Tracks (4 weeks)</span>
+        {% for track in top_tracks %}
+          <div class="item">
+            <div class="meta"><span class="index">{{ track.index }}</span></div>
+            <div class="content">
+              <span class="title title--small lg:title--base" data-clamp="1">{{ track.track_name }}</span>
+              <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
+            </div>
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+      <div class="stretch-x hidden lg:visible">
+        <span class="title title--small lg:title--base">Top Artists (4 weeks)</span>
+        {% for artist in top_artists %}
+          <div class="item">
+            <div class="meta"><span class="index">{{ artist.index }}</span></div>
+            <div class="content">
+              <span class="title title--small lg:title--base" data-clamp="1">{{ artist.artist_name }}</span>
+              <span class="label label--small lg:label--base" data-clamp="1">{{ artist.genres }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 {% endif %}
 
@@ -129,31 +146,44 @@ Click "Edit Markup" and paste the templates below into each layout tab.
 ```liquid
 {% if error %}
   <div class="layout layout--col">
-    <span class="title title--small">Spotify</span>
+    <span class="title title--small lg:title--base">Spotify</span>
     <span class="description">{{ error_message }}</span>
   </div>
 {% else %}
-  <div class="layout layout--col gap--small">
+  <div class="layout layout--col gap--small lg:gap--medium">
     {% if has_now_playing %}
       <div class="item item--emphasis-2">
         <div class="meta"></div>
         <div class="content">
-          <span class="title title--small">{{ now_playing_track | truncate: 30 }}</span>
-          <span class="label label--small">{{ now_playing_artist | truncate: 25 }}</span>
+          <span class="title title--small lg:title--base" data-clamp="1">{{ now_playing_track }}</span>
+          <span class="label label--small lg:label--base" data-clamp="1">{{ now_playing_artist }}</span>
         </div>
       </div>
       <div class="divider"></div>
     {% endif %}
-    <span class="title title--small">Top Tracks</span>
+    <span class="title title--small lg:title--base">Top Tracks</span>
     {% for track in top_tracks limit: 4 %}
       <div class="item">
         <div class="meta"><span class="index">{{ track.index }}</span></div>
         <div class="content">
-          <span class="title title--small">{{ track.track_name | truncate: 30 }}</span>
-          <span class="label label--small">{{ track.artist_name | truncate: 25 }}</span>
+          <span class="title title--small lg:title--base" data-clamp="1">{{ track.track_name }}</span>
+          <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
         </div>
       </div>
     {% endfor %}
+    <div class="hidden lg:visible">
+      <div class="divider"></div>
+      <span class="title title--small lg:title--base">Top Artists</span>
+      {% for artist in top_artists limit: 3 %}
+        <div class="item">
+          <div class="meta"><span class="index">{{ artist.index }}</span></div>
+          <div class="content">
+            <span class="title title--small lg:title--base" data-clamp="1">{{ artist.artist_name }}</span>
+            <span class="label label--small lg:label--base" data-clamp="1">{{ artist.genres }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
 {% endif %}
 
@@ -167,7 +197,7 @@ Click "Edit Markup" and paste the templates below into each layout tab.
 ```liquid
 {% if error %}
   <div class="layout layout--col">
-    <span class="title title--small">Spotify</span>
+    <span class="title title--small lg:title--base">Spotify</span>
     <span class="description">{{ error_message }}</span>
   </div>
 {% else %}
@@ -175,33 +205,46 @@ Click "Edit Markup" and paste the templates below into each layout tab.
     <div class="columns">
       <div class="column">
         {% if has_now_playing %}
-          <span class="title title--small">Now Playing</span>
-          <span class="description">{{ now_playing_track | truncate: 25 }}</span>
-          <span class="label label--small">{{ now_playing_artist | truncate: 20 }}</span>
+          <span class="title title--small lg:title--base">Now Playing</span>
+          <span class="description lg:description--large" data-clamp="1" data-clamp-lg="2">{{ now_playing_track }}</span>
+          <span class="label label--small lg:label--base" data-clamp="1">{{ now_playing_artist }}</span>
           <div class="divider"></div>
         {% endif %}
-        <span class="title title--small">Top Tracks</span>
+        <span class="title title--small lg:title--base">Top Tracks</span>
         {% for track in top_tracks limit: 3 %}
           <div class="item">
             <div class="meta"><span class="index">{{ track.index }}</span></div>
             <div class="content">
-              <span class="description">{{ track.track_name | truncate: 25 }}</span>
-              <span class="label label--small">{{ track.artist_name | truncate: 20 }}</span>
+              <span class="description lg:description--large" data-clamp="1">{{ track.track_name }}</span>
+              <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
             </div>
           </div>
         {% endfor %}
       </div>
       <div class="column">
-        <span class="title title--small">Top Artists</span>
+        <span class="title title--small lg:title--base">Top Artists</span>
         {% for artist in top_artists limit: 3 %}
           <div class="item">
             <div class="meta"><span class="index">{{ artist.index }}</span></div>
             <div class="content">
-              <span class="description">{{ artist.artist_name | truncate: 25 }}</span>
-              <span class="label label--small">{{ artist.genres | truncate: 20 }}</span>
+              <span class="description lg:description--large" data-clamp="1">{{ artist.artist_name }}</span>
+              <span class="label label--small lg:label--base" data-clamp="1">{{ artist.genres }}</span>
             </div>
           </div>
         {% endfor %}
+        <div class="hidden lg:visible">
+          <div class="divider"></div>
+          <span class="title title--small lg:title--base">Recently Played</span>
+          {% for track in recent_tracks limit: 2 %}
+            <div class="item">
+              <div class="meta"><span class="index">{{ track.index }}</span></div>
+              <div class="content">
+                <span class="description" data-clamp="1">{{ track.track_name }}</span>
+                <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
@@ -217,17 +260,17 @@ Click "Edit Markup" and paste the templates below into each layout tab.
 ```liquid
 {% if error %}
   <div class="layout layout--col">
-    <span class="title title--small">Spotify</span>
+    <span class="title title--small lg:title--base">Spotify</span>
   </div>
 {% else %}
   <div class="layout layout--col gap--small">
     {% if has_now_playing %}
-      <span class="title title--small">{{ now_playing_track | truncate: 20 }}</span>
-      <span class="label label--small">{{ now_playing_artist | truncate: 18 }}</span>
+      <span class="title title--small lg:title--base" data-clamp="1">{{ now_playing_track }}</span>
+      <span class="label label--small lg:label--base" data-clamp="1">{{ now_playing_artist }}</span>
     {% else %}
-      <span class="title title--small">Top Tracks</span>
+      <span class="title title--small lg:title--base">Top Tracks</span>
       {% for track in top_tracks limit: 3 %}
-        <span class="description">{{ track.index }}. {{ track.track_name | truncate: 18 }}</span>
+        <span class="description lg:description--large" data-clamp="1">{{ track.index }}. {{ track.track_name }}</span>
       {% endfor %}
     {% endif %}
   </div>

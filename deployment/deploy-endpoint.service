@@ -5,14 +5,17 @@ After=network.target
 [Service]
 Type=simple
 User=antfarm
+Group=antfarm
 WorkingDirectory=/home/antfarm/deployments/trmnl-spotify-private
+Environment="NODE_ENV=production"
+# Generate with: openssl rand -hex 32
+# Set the real token on the server only — do not commit it
+Environment="DEPLOY_TOKEN=your-secure-token-here"
+
 ExecStart=/usr/bin/node deployment/deploy-endpoint.js
-Restart=on-failure
+
+Restart=always
 RestartSec=10
-Environment=NODE_ENV=production
-# Generate a deploy token: openssl rand -hex 32
-# Set it here and in the n8n webhook that triggers deploys.
-Environment=DEPLOY_TOKEN=REPLACE_WITH_REAL_TOKEN
 
 [Install]
 WantedBy=multi-user.target

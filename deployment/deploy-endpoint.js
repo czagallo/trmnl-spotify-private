@@ -1,46 +1,61 @@
-require('dotenv').config();
+#!/usr/bin/env node
+
+/**
+ * Simple HTTP endpoint for triggering deployments.
+ * Runs as a separate service, called by n8n on Codeberg push events.
+ *
+ * Usage: node deploy-endpoint.js
+ * Then configure n8n to POST to http://localhost:3007/deploy
+ */
+
 const http = require('http');
-const { execSync } = require('child_process');
+const { exec } = require('child_process');
 
 const PORT = 3007;
-// Set DEPLOY_TOKEN in the systemd service file environment, not here.
-// Generate a random token: openssl rand -hex 32
-const DEPLOY_TOKEN = process.env.DEPLOY_TOKEN || 'REPLACE_WITH_REAL_TOKEN';
 const DEPLOY_SCRIPT = '/home/antfarm/deployments/trmnl-spotify-private/deployment/deploy.sh';
 
-const server = http.createServer((req, res) => {
-  if (req.method === 'POST' && req.url === '/deploy') {
-    let body = '';
-    req.on('data', chunk => body += chunk);
-    req.on('end', () => {
-      try {
-        const data = JSON.parse(body);
-        if (data.token !== DEPLOY_TOKEN) {
-          res.writeHead(403);
-          res.end('Forbidden');
-          return;
-        }
-      } catch (e) {
-        // Allow empty body if token matches via query
-      }
+// Add a secret token for security
+const DEPLOY_TOKEN = process.env.DEPLOY_TOKEN || 'change-me-in-production';
 
-      console.log('Deploy triggered at', new Date().toISOString());
-      try {
-        execSync(`bash ${DEPLOY_SCRIPT}`, { stdio: 'inherit', timeout: 120000 });
-        res.writeHead(200);
-        res.end('OK');
-      } catch (err) {
-        console.error('Deploy failed:', err.message);
-        res.writeHead(500);
-        res.end('Deploy failed');
-      }
-    });
-  } else {
-    res.writeHead(404);
-    res.end('Not found');
+const server = http.createServer((req, res) => {
+  // Only accept POST to /deploy
+  if (req.method !== 'POST' || req.url !== '/deploy') {
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Not found' }));
+    return;
   }
+
+  // Check authorization header
+  const authHeader = req.headers['authorization'];
+  if (authHeader !== `Bearer ${DEPLOY_TOKEN}`) {
+    res.writeHead(401, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Unauthorized' }));
+    return;
+  }
+
+  // Execute deployment script
+  console.log(`[${new Date().toISOString()}] Deployment triggered`);
+
+  exec(DEPLOY_SCRIPT, (error, stdout, stderr) => {
+    const response = {
+      success: !error,
+      timestamp: new Date().toISOString(),
+      stdout: stdout,
+      stderr: stderr
+    };
+
+    if (error) {
+      console.error('Deployment error:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+    } else {
+      console.log('Deployment successful');
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+    }
+
+    res.end(JSON.stringify(response, null, 2));
+  });
 });
 
-server.listen(PORT, () => {
-  console.log(`Deploy endpoint listening on port ${PORT}`);
+server.listen(PORT, 'localhost', () => {
+  console.log(`Deployment endpoint listening on http://localhost:${PORT}/deploy`);
 });
