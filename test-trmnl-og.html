@@ -1,8 +1,345 @@
-<!-- Save as test-trmnl-og.html -->
-<link rel="stylesheet" href="https://trmnl.com/framework/trmnl.css">
-<script src="https://trmnl.com/framework/trmnl.js"></script>
-<div class="screen screen--og screen--1bit">
-  <div class="view view--full">
-    <!-- paste your Full Layout template here with hardcoded values -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRMNL OG - Spotify Stats Test</title>
+  <link rel="stylesheet" href="https://trmnl.com/assets/plugins-7d2bfc6a591666191cfcc825ea700d87814be60de3065a5770e9270c477e52bf.css">
+  <style>
+    body {
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      padding: 40px 20px;
+      font-family: system-ui, sans-serif;
+      color: #ccc;
+    }
+    h1 {
+      color: #fff;
+      margin: 0;
+    }
+    h2 {
+      color: #aaa;
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .test-wrapper {
+      border: 2px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+<h1>TRMNL OG (800x480) - Spotify Stats</h1>
+
+<!-- ============================================================ -->
+<!-- FULL LAYOUT (800x480) -->
+<!-- ============================================================ -->
+<h2>Full Layout</h2>
+<div class="test-wrapper trmnl">
+  <div class="screen screen--1bit screen--og screen--md screen--1x" style="--screen-w:800px; --screen-h:480px; --ui-scale:1; --gap-scale:1; --color-depth:1;">
+    <div class="view view--full">
+
+      <div class="layout layout--col gap--medium lg:gap--large">
+        <div class="item item--emphasis-2">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="title title--small lg:title--base">Now Playing</span>
+            <span class="description lg:description--large" data-clamp="1" data-clamp-lg="2">Bohemian Rhapsody - Queen</span>
+            <div class="flex gap--small">
+              <span class="label label--small lg:label--base label--underline" data-clamp="1">A Night at the Opera</span>
+              <span class="label label--small lg:label--base">Playing</span>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="flex flex--row">
+          <div class="stretch-x">
+            <span class="title title--small lg:title--base">Top Tracks (4 weeks)</span>
+            <div class="item">
+              <div class="meta"><span class="index">1</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Stargazing</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Myles Smith</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">2</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Not Like Us</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Kendrick Lamar</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">3</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Die With A Smile</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Lady Gaga, Bruno Mars</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">4</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Birds of a Feather</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Billie Eilish</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">5</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Espresso</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Sabrina Carpenter</span>
+              </div>
+            </div>
+          </div>
+          <div class="stretch-x hidden lg:visible">
+            <span class="title title--small lg:title--base">Top Artists (4 weeks)</span>
+            <div class="item">
+              <div class="meta"><span class="index">1</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Radiohead</span>
+                <span class="label label--small lg:label--base" data-clamp="1">alternative rock, art rock</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">2</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Kendrick Lamar</span>
+                <span class="label label--small lg:label--base" data-clamp="1">hip hop, west coast rap</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">3</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Billie Eilish</span>
+                <span class="label label--small lg:label--base" data-clamp="1">pop, electropop</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">4</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Tame Impala</span>
+                <span class="label label--small lg:label--base" data-clamp="1">psychedelic pop, rock</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">5</span></div>
+              <div class="content">
+                <span class="title title--small lg:title--base" data-clamp="1">Tyler, The Creator</span>
+                <span class="label label--small lg:label--base" data-clamp="1">hip hop, rap</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="title_bar">
+        <span class="title">Spotify Stats</span>
+      </div>
+
+    </div>
   </div>
 </div>
+
+<!-- ============================================================ -->
+<!-- HALF VERTICAL LAYOUT (400x480) -->
+<!-- ============================================================ -->
+<h2>Half Vertical Layout</h2>
+<div class="test-wrapper trmnl">
+  <div class="screen screen--1bit screen--og screen--md screen--1x" style="--screen-w:800px; --screen-h:480px; --ui-scale:1; --gap-scale:1; --color-depth:1;">
+    <div class="view view--half_vertical">
+
+      <div class="layout layout--col gap--small lg:gap--medium">
+        <div class="item item--emphasis-2">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="title title--small lg:title--base" data-clamp="1">Bohemian Rhapsody</span>
+            <span class="label label--small lg:label--base" data-clamp="1">Queen</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <span class="title title--small lg:title--base">Top Tracks</span>
+        <div class="item">
+          <div class="meta"><span class="index">1</span></div>
+          <div class="content">
+            <span class="title title--small lg:title--base" data-clamp="1">Stargazing</span>
+            <span class="label label--small lg:label--base" data-clamp="1">Myles Smith</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"><span class="index">2</span></div>
+          <div class="content">
+            <span class="title title--small lg:title--base" data-clamp="1">Not Like Us</span>
+            <span class="label label--small lg:label--base" data-clamp="1">Kendrick Lamar</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"><span class="index">3</span></div>
+          <div class="content">
+            <span class="title title--small lg:title--base" data-clamp="1">Die With A Smile</span>
+            <span class="label label--small lg:label--base" data-clamp="1">Lady Gaga, Bruno Mars</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"><span class="index">4</span></div>
+          <div class="content">
+            <span class="title title--small lg:title--base" data-clamp="1">Birds of a Feather</span>
+            <span class="label label--small lg:label--base" data-clamp="1">Billie Eilish</span>
+          </div>
+        </div>
+        <div class="hidden lg:visible">
+          <div class="divider"></div>
+          <span class="title title--small lg:title--base">Top Artists</span>
+          <div class="item">
+            <div class="meta"><span class="index">1</span></div>
+            <div class="content">
+              <span class="title title--small lg:title--base" data-clamp="1">Radiohead</span>
+              <span class="label label--small lg:label--base" data-clamp="1">alternative rock, art rock</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="meta"><span class="index">2</span></div>
+            <div class="content">
+              <span class="title title--small lg:title--base" data-clamp="1">Kendrick Lamar</span>
+              <span class="label label--small lg:label--base" data-clamp="1">hip hop, west coast rap</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="meta"><span class="index">3</span></div>
+            <div class="content">
+              <span class="title title--small lg:title--base" data-clamp="1">Billie Eilish</span>
+              <span class="label label--small lg:label--base" data-clamp="1">pop, electropop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="title_bar">
+        <span class="title">Spotify Stats</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- HALF HORIZONTAL LAYOUT (800x240) -->
+<!-- ============================================================ -->
+<h2>Half Horizontal Layout</h2>
+<div class="test-wrapper trmnl">
+  <div class="screen screen--1bit screen--og screen--md screen--1x" style="--screen-w:800px; --screen-h:480px; --ui-scale:1; --gap-scale:1; --color-depth:1;">
+    <div class="view view--half_horizontal">
+
+      <div class="layout">
+        <div class="columns">
+          <div class="column">
+            <span class="title title--small lg:title--base">Now Playing</span>
+            <span class="description lg:description--large" data-clamp="1" data-clamp-lg="2">Bohemian Rhapsody</span>
+            <span class="label label--small lg:label--base" data-clamp="1">Queen</span>
+            <div class="divider"></div>
+            <span class="title title--small lg:title--base">Top Tracks</span>
+            <div class="item">
+              <div class="meta"><span class="index">1</span></div>
+              <div class="content">
+                <span class="description lg:description--large" data-clamp="1">Stargazing</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Myles Smith</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">2</span></div>
+              <div class="content">
+                <span class="description lg:description--large" data-clamp="1">Not Like Us</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Kendrick Lamar</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">3</span></div>
+              <div class="content">
+                <span class="description lg:description--large" data-clamp="1">Die With A Smile</span>
+                <span class="label label--small lg:label--base" data-clamp="1">Lady Gaga, Bruno Mars</span>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <span class="title title--small lg:title--base">Top Artists</span>
+            <div class="item">
+              <div class="meta"><span class="index">1</span></div>
+              <div class="content">
+                <span class="description lg:description--large" data-clamp="1">Radiohead</span>
+                <span class="label label--small lg:label--base" data-clamp="1">alternative rock, art rock</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">2</span></div>
+              <div class="content">
+                <span class="description lg:description--large" data-clamp="1">Kendrick Lamar</span>
+                <span class="label label--small lg:label--base" data-clamp="1">hip hop, west coast rap</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="meta"><span class="index">3</span></div>
+              <div class="content">
+                <span class="description lg:description--large" data-clamp="1">Billie Eilish</span>
+                <span class="label label--small lg:label--base" data-clamp="1">pop, electropop</span>
+              </div>
+            </div>
+            <div class="hidden lg:visible">
+              <div class="divider"></div>
+              <span class="title title--small lg:title--base">Recently Played</span>
+              <div class="item">
+                <div class="meta"><span class="index">1</span></div>
+                <div class="content">
+                  <span class="description" data-clamp="1">Karma Police</span>
+                  <span class="label label--small lg:label--base" data-clamp="1">Radiohead</span>
+                </div>
+              </div>
+              <div class="item">
+                <div class="meta"><span class="index">2</span></div>
+                <div class="content">
+                  <span class="description" data-clamp="1">Everything In Its Right Place</span>
+                  <span class="label label--small lg:label--base" data-clamp="1">Radiohead</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="title_bar">
+        <span class="title">Spotify Stats</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- QUADRANT LAYOUT (400x240) -->
+<!-- ============================================================ -->
+<h2>Quadrant Layout</h2>
+<div class="test-wrapper trmnl">
+  <div class="screen screen--1bit screen--og screen--md screen--1x" style="--screen-w:800px; --screen-h:480px; --ui-scale:1; --gap-scale:1; --color-depth:1;">
+    <div class="view view--quadrant">
+
+      <div class="layout layout--col gap--small">
+        <span class="title title--small lg:title--base" data-clamp="1">Bohemian Rhapsody</span>
+        <span class="label label--small lg:label--base" data-clamp="1">Queen</span>
+      </div>
+
+      <div class="title_bar">
+        <span class="title">Spotify</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://trmnl.com/assets/plugin-render/plugins-10d02703d881dd9f9ad4ca8cc69f57db62dac7edcf27e152e33f1533ac58428d.js"></script>
+</body>
+</html>
