@@ -117,7 +117,7 @@ app.get('/api/spotify', async (req, res) => {
   }
 
   const accessToken = authHeader.replace('Bearer ', '');
-  console.log(`Auth header present: ${!!authHeader}, token length: ${accessToken.length}, token prefix: ${accessToken.substring(0, 10)}...`);
+  console.log(`Auth header present, token length: ${accessToken.length}`);
 
   try {
     const [nowPlaying, recentTracks, topTracks, topArtists] = await Promise.all([
