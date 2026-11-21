@@ -1,0 +1,5 @@
+{"items": [
+  {"track": {"name": "Stargazing", "artists": [{"name": "Myles Smith"}], "album": {"name": "A Minute..."}}, "played_at": "2026-11-21T09:00:00.000Z"},
+  {"track": {"name": "Not Like Us", "artists": [{"name": "Kendrick Lamar"}], "album": {"name": "Not Like Us"}}, "played_at": "2026-11-21T08:55:00.000Z"},
+  {"track": null, "played_at": null}
+]}

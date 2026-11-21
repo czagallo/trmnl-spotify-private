@@ -1,0 +1,105 @@
+{% comment %} Spotify Stats - Full layout. Paste into the "Full" markup tab. {% endcomment %}
+{% if error %}
+<div class="layout layout--col layout--center gap--medium">
+  <span class="title title--large lg:title--xlarge lg:portrait:title--xxlarge">Spotify unavailable</span>
+  <span class="description description--large lg:description--xlarge lg:portrait:description--xxlarge text--center">{{ error_message }}</span>
+</div>
+{% else %}
+<div class="layout layout--col layout--stretch-x layout--top gap--medium lg:gap--large">
+  {% if has_now_playing %}
+  <div class="flex flex--col flex--stretch-x gap--xsmall">
+    <span class="label label--inverted lg:label--large lg:portrait:label--xlarge" style="align-self: flex-start;">{% if now_playing_is_active %}Now playing{% else %}Paused{% endif %}</span>
+    <span class="title title--large lg:title--xxlarge lg:portrait:title--xxlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ now_playing_track }}</span>
+    <span class="description description--large lg:description--xlarge lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ now_playing_artist }}</span>
+    <div class="hidden lg:block stretch-x">
+      <span class="description lg:description--large lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ now_playing_album }}</span>
+    </div>
+  </div>
+  {% elsif recent_count > 0 %}
+  <div class="flex flex--col flex--stretch-x gap--xsmall">
+    <span class="label label--outline text--black lg:label--large lg:portrait:label--xlarge" style="align-self: flex-start;">Last played</span>
+    <span class="title title--large lg:title--xxlarge lg:portrait:title--xxlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ recent_tracks[0].track_name }}</span>
+    <span class="description description--large lg:description--xlarge lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ recent_tracks[0].artist_name }}</span>
+  </div>
+  {% else %}
+  <span class="title title--large lg:title--xxlarge lg:portrait:title--xxlarge">Nothing playing</span>
+  {% endif %}
+  <div class="grid grid--cols-2 lg:grid--cols-3 lg:portrait:grid--cols-2">
+    <div class="flex flex--col flex--stretch-x gap--small lg:gap--medium">
+      <span class="title title--small lg:title--large lg:portrait:title--large">Top tracks</span>
+      {% for track in top_tracks limit: 5 %}
+      <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums lg:label--large lg:portrait:label--xlarge">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title lg:title--xlarge lg:portrait:title--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.artist_name }}</span>
+    </div>
+  </div>
+      {% else %}
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xxlarge">No listening data yet</span>
+      {% endfor %}
+    </div>
+    <div class="flex flex--col flex--stretch-x gap--small lg:gap--medium">
+      <span class="title title--small lg:title--large lg:portrait:title--large">Top artists</span>
+      {% for artist in top_artists limit: 5 %}
+      <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums lg:label--large lg:portrait:label--xlarge">{{ artist.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title lg:title--xlarge lg:portrait:title--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ artist.artist_name }}</span>
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ artist.genres }}</span>
+    </div>
+  </div>
+      {% else %}
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xxlarge">No listening data yet</span>
+      {% endfor %}
+    </div>
+    <div class="hidden lg:block lg:portrait:hidden">
+      <div class="flex flex--col flex--stretch-x gap--small lg:gap--medium">
+        <span class="title title--small lg:title--large lg:portrait:title--large">Recently played</span>
+        {% for track in recent_tracks limit: 5 %}
+        <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums lg:label--large lg:portrait:label--xlarge">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title lg:title--xlarge lg:portrait:title--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.artist_name }}</span>
+    </div>
+  </div>
+        {% else %}
+        <span class="description description--large lg:description--xlarge lg:portrait:description--xxlarge">Nothing played recently</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="hidden portrait:block lg:portrait:block">
+    <div class="flex flex--col flex--stretch-x gap--small lg:gap--medium">
+      <span class="title title--small lg:title--large lg:portrait:title--large">Recently played</span>
+      {% for track in recent_tracks limit: 2 %}
+      <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums lg:label--large lg:portrait:label--xlarge">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title lg:title--xlarge lg:portrait:title--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.artist_name }}</span>
+    </div>
+  </div>
+      {% else %}
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xxlarge">Nothing played recently</span>
+      {% endfor %}
+      <div class="lg:hidden">
+        {% for track in recent_tracks offset: 2 limit: 1 %}
+      <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums lg:label--large lg:portrait:label--xlarge">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title lg:title--xlarge lg:portrait:title--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+      <span class="description description--large lg:description--xlarge lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.artist_name }}</span>
+    </div>
+  </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="title_bar">
+  <span class="title">Spotify Stats</span>
+  <span class="instance">Last 4 weeks</span>
+</div>

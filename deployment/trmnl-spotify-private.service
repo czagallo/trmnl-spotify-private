@@ -9,6 +9,8 @@ Group=antfarm
 WorkingDirectory=/home/antfarm/deployments/trmnl-spotify-private
 Environment="NODE_ENV=production"
 Environment="PORT=3006"
+# Loopback only: the Cloudflare tunnel (cloudflared) on this host connects to 127.0.0.1:3006.
+Environment="HOST=127.0.0.1"
 
 ExecStartPre=/usr/local/bin/kill_port.sh 3006
 ExecStartPre=/bin/sleep 2

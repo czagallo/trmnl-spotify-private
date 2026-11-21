@@ -1,0 +1,69 @@
+{% comment %} Spotify Stats - Quadrant layout. Paste into the "Quadrant" markup tab.
+Quadrant is the same size in both orientations on TRMNL X, so it has no portrait step. {% endcomment %}
+{% if error %}
+<div class="layout layout--col layout--center gap--small">
+  <span class="title title--small lg:title--base">Spotify unavailable</span>
+  <span class="description description--large text--center">{{ error_message }}</span>
+</div>
+{% else %}
+<div class="layout layout--col layout--stretch-x layout--top gap--small">
+  {% if has_now_playing %}
+  <div class="flex flex--col flex--stretch-x">
+    <span class="label label--inverted label--small lg:label--base" style="align-self: flex-start;">{% if now_playing_is_active %}Now playing{% else %}Paused{% endif %}</span>
+    <span class="title title--small lg:title--base stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ now_playing_track }}</span>
+    <span class="description lg:description--large stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ now_playing_artist }}</span>
+  </div>
+  <div class="flex flex--col flex--stretch-x gap--xsmall">
+    {% for track in top_tracks limit: 1 %}
+    <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums label--small lg:label--base">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title title--small lg:title--base stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+    </div>
+  </div>
+    {% endfor %}
+    <div class="hidden lg:block">
+      <div class="flex flex--col flex--stretch-x gap--xsmall">
+        {% for track in top_tracks offset: 1 limit: 3 %}
+        <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums label--small lg:label--base">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title title--small lg:title--base stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+    </div>
+  </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <span class="label label--outline text--black label--small lg:label--base" style="align-self: flex-start;">Top tracks</span>
+  <div class="flex flex--col flex--stretch-x gap--xsmall">
+    {% for track in top_tracks limit: 3 %}
+    <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums label--small lg:label--base">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title title--small lg:title--base stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+    </div>
+  </div>
+    {% else %}
+    <span class="description lg:description--large">No listening data yet</span>
+    {% endfor %}
+    <div class="hidden lg:block">
+      <div class="flex flex--col flex--stretch-x gap--xsmall">
+        {% for track in top_tracks offset: 3 limit: 2 %}
+        <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums label--small lg:label--base">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title title--small lg:title--base stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+    </div>
+  </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+<div class="title_bar">
+  <span class="title">Spotify</span>
+</div>

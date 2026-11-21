@@ -1,0 +1,57 @@
+{% comment %} Spotify Stats - Half vertical layout. Paste into the "Half Vertical" markup tab. {% endcomment %}
+{% if error %}
+<div class="layout layout--col layout--center gap--medium">
+  <span class="title lg:title--large lg:portrait:title--xlarge">Spotify unavailable</span>
+  <span class="description description--large lg:description--xlarge lg:portrait:description--xxlarge text--center">{{ error_message }}</span>
+</div>
+{% else %}
+<div class="layout layout--col layout--stretch-x layout--top gap--medium">
+  {% if has_now_playing %}
+  <div class="flex flex--col flex--stretch-x gap--xsmall">
+    <span class="label label--inverted label--small lg:label--base lg:portrait:label--large" style="align-self: flex-start;">{% if now_playing_is_active %}Now playing{% else %}Paused{% endif %}</span>
+    <span class="title title--small lg:title--large lg:portrait:title--xlarge stretch-x" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ now_playing_track }}</span>
+    <span class="description lg:description--large lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ now_playing_artist }}</span>
+  </div>
+  {% elsif recent_count > 0 %}
+  <div class="flex flex--col flex--stretch-x gap--xsmall">
+    <span class="label label--outline text--black label--small lg:label--base lg:portrait:label--large" style="align-self: flex-start;">Last played</span>
+    <span class="title title--small lg:title--large lg:portrait:title--xlarge stretch-x" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ recent_tracks[0].track_name }}</span>
+    <span class="description lg:description--large lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ recent_tracks[0].artist_name }}</span>
+  </div>
+  {% else %}
+  <span class="title title--small lg:title--large lg:portrait:title--xlarge">Nothing playing</span>
+  {% endif %}
+  <div class="flex flex--col flex--stretch-x gap--small">
+    <span class="title title--small lg:title--base lg:portrait:title--large">Top tracks</span>
+    {% for track in top_tracks limit: 4 %}
+    <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums label--small lg:label--base lg:portrait:label--large">{{ track.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title title--small lg:title--large lg:portrait:title--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.track_name }}</span>
+      <span class="description lg:description--large lg:portrait:description--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ track.artist_name }}</span>
+    </div>
+  </div>
+    {% else %}
+    <span class="description lg:description--large lg:portrait:description--xlarge">No listening data yet</span>
+    {% endfor %}
+  </div>
+  {% if top_artists.size > 0 %}
+  <div class="hidden lg:block">
+    <div class="flex flex--col flex--stretch-x gap--small">
+      <span class="title title--small lg:title--base lg:portrait:title--large">Top artists</span>
+      {% for artist in top_artists limit: 3 %}
+      <div class="flex flex--row flex--left gap--small">
+    <span class="label label--outline text--black value--tnums label--small lg:label--base lg:portrait:label--large">{{ artist.index }}</span>
+    <div class="flex flex--col flex--stretch-x" style="flex: 1; min-width: 0;">
+      <span class="title title--small lg:title--large lg:portrait:title--xlarge stretch-x" style="display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ artist.artist_name }}</span>
+    </div>
+  </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+<div class="title_bar">
+  <span class="title">Spotify Stats</span>
+</div>

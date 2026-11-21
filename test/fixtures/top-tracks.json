@@ -1,0 +1,5 @@
+{"items": [
+  {"name": "Die With A Smile", "artists": [{"name": "Lady Gaga"}, {"name": "Bruno Mars"}], "album": {"name": "Die With A Smile"}},
+  {"name": "Birds of a Feather", "artists": [{"name": "Billie Eilish"}], "album": {"name": "Hit Me Hard and Soft"}},
+  {"name": null, "artists": null, "album": null}
+]}

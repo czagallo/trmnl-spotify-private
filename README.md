@@ -11,7 +11,7 @@ Unlike a marketplace plugin where the server handles OAuth, this private plugin 
 - **Top Tracks** - your most-listened tracks (last 4 weeks)
 - **Top Artists** - your most-listened artists (last 4 weeks)
 - All 4 TRMNL layout sizes (full, half vertical, half horizontal, quadrant)
-- **TRMNL X optimized** - responsive upsizing via `lg:` classes, extra content on larger screens, JS-based text clamping via `data-clamp`
+- **TRMNL X optimized** - extra content via `lg:` classes and larger type in TRMNL X portrait via `lg:portrait:` classes
 
 ## How It Works
 
@@ -44,7 +44,14 @@ cp .env.example .env
 npm start
 ```
 
-The server runs on port 3006 by default (configurable via `PORT` in `.env`).
+The server runs on `127.0.0.1:3006` by default (`PORT` and `HOST` in `.env`). It is meant to sit
+behind a tunnel or reverse proxy on the same host; set `HOST=0.0.0.0` only if the proxy runs on
+another machine.
+
+Responses are cached in memory per access token (keyed by a SHA-256 of the token, never the
+token itself; at most 100 entries) for `CACHE_TTL_MS` (default 60000), so TRMNL polling and
+retries cannot push the plugin into Spotify's rate limits. A 429 from Spotify is cached for its
+`Retry-After` (at most 5 minutes).
 
 ## TRMNL Plugin Setup
 
@@ -73,213 +80,22 @@ The server runs on port 3006 by default (configurable via `PORT` in `.env`).
 
 ### 4. Add Markup Templates
 
-Click "Edit Markup" and paste the templates below into each layout tab.
+Click "Edit Markup" and paste each file from `templates/` into the matching layout tab:
 
-## Markup Templates
+| File | TRMNL markup tab |
+|------|------------------|
+| `templates/full.liquid` | Full |
+| `templates/half_horizontal.liquid` | Half Horizontal |
+| `templates/half_vertical.liquid` | Half Vertical |
+| `templates/quadrant.liquid` | Quadrant |
 
-### Full Layout
-
-```liquid
-{% if error %}
-  <div class="layout layout--col">
-    <div class="columns">
-      <div class="column">
-        <div class="markdown">
-          <span class="title lg:title--large">Connection Required</span>
-          <div class="content content--center">{{ error_message }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-{% else %}
-  <div class="layout layout--col gap--medium lg:gap--large">
-    {% if has_now_playing %}
-      <div class="item item--emphasis-2">
-        <div class="meta"></div>
-        <div class="content">
-          <span class="title title--small lg:title--base">Now Playing</span>
-          <span class="description lg:description--large" data-clamp="1" data-clamp-lg="2">{{ now_playing_track }} - {{ now_playing_artist }}</span>
-          <div class="flex gap--small">
-            <span class="label label--small lg:label--base label--underline" data-clamp="1">{{ now_playing_album }}</span>
-            <span class="label label--small lg:label--base">{% if now_playing_is_active %}Playing{% else %}Paused{% endif %}</span>
-          </div>
-        </div>
-      </div>
-      <div class="divider"></div>
-    {% endif %}
-    <div class="flex flex--row">
-      <div class="stretch-x">
-        <span class="title title--small lg:title--base">Top Tracks (4 weeks)</span>
-        {% for track in top_tracks %}
-          <div class="item">
-            <div class="meta"><span class="index">{{ track.index }}</span></div>
-            <div class="content">
-              <span class="title title--small lg:title--base" data-clamp="1">{{ track.track_name }}</span>
-              <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-      <div class="stretch-x hidden lg:visible">
-        <span class="title title--small lg:title--base">Top Artists (4 weeks)</span>
-        {% for artist in top_artists %}
-          <div class="item">
-            <div class="meta"><span class="index">{{ artist.index }}</span></div>
-            <div class="content">
-              <span class="title title--small lg:title--base" data-clamp="1">{{ artist.artist_name }}</span>
-              <span class="label label--small lg:label--base" data-clamp="1">{{ artist.genres }}</span>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-{% endif %}
-
-<div class="title_bar">
-  <span class="title">Spotify Stats</span>
-</div>
-```
-
-### Half Vertical Layout
-
-```liquid
-{% if error %}
-  <div class="layout layout--col">
-    <span class="title title--small lg:title--base">Spotify</span>
-    <span class="description">{{ error_message }}</span>
-  </div>
-{% else %}
-  <div class="layout layout--col gap--small lg:gap--medium">
-    {% if has_now_playing %}
-      <div class="item item--emphasis-2">
-        <div class="meta"></div>
-        <div class="content">
-          <span class="title title--small lg:title--base" data-clamp="1">{{ now_playing_track }}</span>
-          <span class="label label--small lg:label--base" data-clamp="1">{{ now_playing_artist }}</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-    {% endif %}
-    <span class="title title--small lg:title--base">Top Tracks</span>
-    {% for track in top_tracks limit: 4 %}
-      <div class="item">
-        <div class="meta"><span class="index">{{ track.index }}</span></div>
-        <div class="content">
-          <span class="title title--small lg:title--base" data-clamp="1">{{ track.track_name }}</span>
-          <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
-        </div>
-      </div>
-    {% endfor %}
-    <div class="hidden lg:visible">
-      <div class="divider"></div>
-      <span class="title title--small lg:title--base">Top Artists</span>
-      {% for artist in top_artists limit: 3 %}
-        <div class="item">
-          <div class="meta"><span class="index">{{ artist.index }}</span></div>
-          <div class="content">
-            <span class="title title--small lg:title--base" data-clamp="1">{{ artist.artist_name }}</span>
-            <span class="label label--small lg:label--base" data-clamp="1">{{ artist.genres }}</span>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
-{% endif %}
-
-<div class="title_bar">
-  <span class="title">Spotify Stats</span>
-</div>
-```
-
-### Half Horizontal Layout
-
-```liquid
-{% if error %}
-  <div class="layout layout--col">
-    <span class="title title--small lg:title--base">Spotify</span>
-    <span class="description">{{ error_message }}</span>
-  </div>
-{% else %}
-  <div class="layout">
-    <div class="columns">
-      <div class="column">
-        {% if has_now_playing %}
-          <span class="title title--small lg:title--base">Now Playing</span>
-          <span class="description lg:description--large" data-clamp="1" data-clamp-lg="2">{{ now_playing_track }}</span>
-          <span class="label label--small lg:label--base" data-clamp="1">{{ now_playing_artist }}</span>
-          <div class="divider"></div>
-        {% endif %}
-        <span class="title title--small lg:title--base">Top Tracks</span>
-        {% for track in top_tracks limit: 3 %}
-          <div class="item">
-            <div class="meta"><span class="index">{{ track.index }}</span></div>
-            <div class="content">
-              <span class="description lg:description--large" data-clamp="1">{{ track.track_name }}</span>
-              <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-      <div class="column">
-        <span class="title title--small lg:title--base">Top Artists</span>
-        {% for artist in top_artists limit: 3 %}
-          <div class="item">
-            <div class="meta"><span class="index">{{ artist.index }}</span></div>
-            <div class="content">
-              <span class="description lg:description--large" data-clamp="1">{{ artist.artist_name }}</span>
-              <span class="label label--small lg:label--base" data-clamp="1">{{ artist.genres }}</span>
-            </div>
-          </div>
-        {% endfor %}
-        <div class="hidden lg:visible">
-          <div class="divider"></div>
-          <span class="title title--small lg:title--base">Recently Played</span>
-          {% for track in recent_tracks limit: 2 %}
-            <div class="item">
-              <div class="meta"><span class="index">{{ track.index }}</span></div>
-              <div class="content">
-                <span class="description" data-clamp="1">{{ track.track_name }}</span>
-                <span class="label label--small lg:label--base" data-clamp="1">{{ track.artist_name }}</span>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-{% endif %}
-
-<div class="title_bar">
-  <span class="title">Spotify Stats</span>
-</div>
-```
-
-### Quadrant Layout
-
-```liquid
-{% if error %}
-  <div class="layout layout--col">
-    <span class="title title--small lg:title--base">Spotify</span>
-  </div>
-{% else %}
-  <div class="layout layout--col gap--small">
-    {% if has_now_playing %}
-      <span class="title title--small lg:title--base" data-clamp="1">{{ now_playing_track }}</span>
-      <span class="label label--small lg:label--base" data-clamp="1">{{ now_playing_artist }}</span>
-    {% else %}
-      <span class="title title--small lg:title--base">Top Tracks</span>
-      {% for track in top_tracks limit: 3 %}
-        <span class="description lg:description--large" data-clamp="1">{{ track.index }}. {{ track.track_name }}</span>
-      {% endfor %}
-    {% endif %}
-  </div>
-{% endif %}
-
-<div class="title_bar">
-  <span class="title">Spotify</span>
-</div>
-```
+Each template handles now playing, nothing playing (shows the last played track), no listening
+data yet, and the error response. They use TRMNL framework classes only; TRMNL X (`lg:`) gets
+more content (a Recently played column in full, a third track in half horizontal, top artists in
+half vertical, more tracks in quadrant) and TRMNL X portrait (`lg:portrait:`) uses larger type.
+The quadrant is the same size in both orientations on TRMNL X, so it has no portrait step.
+Only black and white are used (no grey fills or grey text, which dither badly on 1-bit panels). Single-line text is truncated with a CSS ellipsis rather than `data-clamp`, which mis-measured
+some list items in testing.
 
 ## API Response Format
 
@@ -308,6 +124,28 @@ The polling endpoint returns flat JSON merge variables:
 }
 ```
 
+### Errors
+
+All errors are returned with HTTP 200 (TRMNL requirement) as `{ "error": true, "error_kind": ..., "error_message": ... }`:
+
+| `error_kind` | Cause |
+|---|---|
+| `token_expired` | Spotify answered 401 |
+| `forbidden` | Spotify answered 403 (usually missing OAuth scopes) |
+| `rate_limited` | Spotify answered 429 |
+| `unavailable` | All four Spotify requests failed (network error, timeout) |
+
+The server logs only HTTP status codes, never tokens or Spotify response bodies.
+
+## Tests
+
+```bash
+npm test
+```
+
+Runs the `node --test` suite in `test/` (fixtures in `test/fixtures/`, Spotify requests are
+injected, no network) and then the start-up smoke test in `scripts/smoke-test.sh`.
+
 ## Endpoints
 
 | Endpoint | Method | Description |
@@ -318,7 +156,9 @@ The polling endpoint returns flat JSON merge variables:
 
 ## Deployment
 
-See `deployment/` for systemd service files and deploy scripts. The app runs on port 3006 with a deploy endpoint on port 3007.
+Pushes to `main` deploy through GitHub Actions (`.github/workflows/deploy.yml`), which runs
+`deployment/deploy.sh` on the server. The systemd unit is `deployment/trmnl-spotify-private.service`
+(port 3006, bound to 127.0.0.1).
 
 ## License
 
