@@ -6,3 +6,6 @@ CLAUDE.md
 AGENTS.md
 .claude/
 test-trmnl-*.html
+secrets/
+deployment/private/
+smoke-test.log

@@ -37,7 +37,7 @@ TRMNL Device <---> TRMNL Server <---> Your Server <---> Spotify API
 ## Server Setup
 
 ```bash
-git clone ssh://git@codeberg.org/czagallo/trmnl-spotify-private.git
+git clone https://github.com/czagallo/trmnl-spotify-private.git
 cd trmnl-spotify-private
 npm install
 cp .env.example .env
